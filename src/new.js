@@ -1,8 +1,6 @@
-import { Button } from "@chakra-ui/react"
+import { Box, Button } from "@chakra-ui/react"
 import { ethers } from "ethers";
 import { useEffect, useState } from "react";
-
-//import styles from '../new.module.css'
 
 const NewNft = () => {
   const abi = 
@@ -481,7 +479,7 @@ const NewNft = () => {
     // const accounts = await provider.listAccounts()
     // console.log(accounts)
     //let currOwner = await 
-    await erc721.functions.safeMint(signer.getAddress(), event.target.url.value)
+    await erc721.functions.safeMint(signer.getAddress(), url)
     //console.log("AAAAA" + currOwner + "asdfasdf")
   }
 
@@ -517,6 +515,7 @@ const NewNft = () => {
     event.preventDefault()
   }
   const [theFiles, setTheFiles] = useState([])
+  const [url, setUrl] = useState([])
     const mintForm = {
         title: '',
         data_url: '',
@@ -526,19 +525,6 @@ const NewNft = () => {
           // send form details to mongo api endpoint
           event.preventDefault()
 
-          const res = await fetch('/api/quernft', {
-            body: JSON.stringify({
-              name: event.target.title.value,
-              data_url: event.target.url.value
-            }),
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            method: 'POST'
-          })
-
-          const result = await res.json()
-          console.log(result)
           console.log(JSON.stringify({
               title: event.target.title.value,
               url: event.target.url.value
@@ -551,20 +537,21 @@ const NewNft = () => {
             // const accounts = await provider.listAccounts()
             // console.log(accounts)
             //let currOwner = await 
-            await erc721.functions.safeMint(signer.getAddress(), event.target.url.value)
+            await erc721.functions.safeMint(signer.getAddress(), url)
       }
     
       return (
         <>
-          <div onDragOver={dragOver} onDrop={dropFiles} className='theBox'></div>
+          {/* <Box bg='teal' _hover={{bg : 'cyan'}} borderRadius='25' onDragOver={dragOver} onDrop={dropFiles} className='theBox'></Box> */}
           <Attachments />
         <form onSubmit={handleSubmit}>
         <label htmlFor="title">Title:</label>
         <input id="title" name="title" type="text" required />
         <label htmlFor="url">URL To Content:</label>
-        <input id="url" name="url" type="text" required />
+        <input id="url" name="url" type="text" onChange={e => setUrl(e.target.value)} required />
         <Button type="submit">Mint!</Button>
       </form>
+      <img src={url}></img>
       </>
       )
 }
