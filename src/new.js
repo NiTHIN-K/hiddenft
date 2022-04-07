@@ -521,6 +521,10 @@ const NewNft = () => {
         data_url: '',
       }
 
+      const test = async event => {
+
+      }
+
       const handleSubmit = async event =>{
           // send form details to mongo api endpoint
           event.preventDefault()
@@ -531,13 +535,30 @@ const NewNft = () => {
             }))
             const provider = new ethers.providers.Web3Provider(window.ethereum)
             const signer = provider.getSigner()
+            const currAddress = await signer.getAddress()
             const erc721 = new ethers.Contract(address, abi, signer)
             console.log("minting")
             window.ethereum.enable()
             // const accounts = await provider.listAccounts()
             // console.log(accounts)
             //let currOwner = await 
-            await erc721.functions.safeMint(signer.getAddress(), url)
+            await erc721.functions.safeMint(currAddress, url)
+
+            var count = await erc721.functions.balanceOf(currAddress) //get NFTs owned by current acct
+            var tokenId = parseInt(count[0]._hex, 16)
+            var body = {}
+            body[tokenId] = {url: url, owner: currAddress}
+            var options = {
+              method: 'POST',
+              body: JSON.stringify(body),
+              headers: {
+                'Content-Type': 'application/json'
+              },
+            }
+           var result = await fetch("http://localhost:3030/mint", options).then(res => res.json())
+           console.log(result)
+            // console.log(parseInt(count[0]._hex, 16))
+            // console.log(acct)
       }
     
       return (
@@ -550,6 +571,8 @@ const NewNft = () => {
         <label htmlFor="url">URL To Content:</label>
         <input id="url" name="url" type="text" onChange={e => setUrl(e.target.value)} required />
         <Button type="submit">Mint!</Button>
+        <Button onClick={test}>test!</Button>
+
       </form>
       <img src={url}></img>
       </>

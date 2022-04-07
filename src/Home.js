@@ -1,11 +1,14 @@
 import { ethers } from "ethers";
 import { FormControl, FormLabel, Input, Button, Box } from '@chakra-ui/react'
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import authContext from "./authcontext";
 // const provider = new ethers.providers.Web3Provider(window.ethereum)
 // const signer = provider.getSigner()
+// const provider = new ethers.providers.Web3Provider(window.ethereum)
 
 
 export default function Home() {
+  const {auth, setAuth} = useContext(authContext)
   const abi = 
 [
     {
@@ -473,15 +476,13 @@ export default function Home() {
   const address = "0x9cd86Aa2DB296722c50f9cC95a5FFc9A6629Ca70"
 
 async function getAcct(){
-
-  const provider = new ethers.providers.Web3Provider(window.ethereum)
-  const signer = provider.getSigner()
+  const signer = auth.getSigner()
   const erc721 = new ethers.Contract(address, abi, signer)
   console.log("getting acct")
   window.ethereum.enable()
-  const accounts = await provider.listAccounts()
+  const accounts = await auth.listAccounts()
   console.log(accounts)
-  let currOwner = await erc721.functions.ownerOf("1")
+  let currOwner = await erc721.functions.ownerOf("8")
   console.log(currOwner)
 }
 
@@ -489,6 +490,7 @@ async function getAcct(){
     <>
       <Button onClick={() => getAcct()} colorScheme={'teal'}>dummy acct check</Button>
       <Button onClick={() => window.location.href='/new'}>Continue</Button>
+      <Button onClick={() => window.location.href='/viewer/:tokenId'}>Viewer</Button>
     </>
   )
 }
