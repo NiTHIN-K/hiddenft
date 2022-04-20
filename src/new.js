@@ -521,9 +521,7 @@ const NewNft = () => {
         data_url: '',
       }
 
-      const test = async event => {
 
-      }
 
       const handleSubmit = async event =>{
           // send form details to mongo api endpoint
@@ -566,14 +564,12 @@ const NewNft = () => {
           {/* <Box bg='teal' _hover={{bg : 'cyan'}} borderRadius='25' onDragOver={dragOver} onDrop={dropFiles} className='theBox'></Box> */}
           <Attachments />
         <form onSubmit={handleSubmit}>
-        <label htmlFor="title">Title:</label>
-        <input id="title" name="title" type="text" required />
-        <label htmlFor="url">URL To Content:</label>
-        <input id="url" name="url" type="text" onChange={e => setUrl(e.target.value)} required />
-        <Button type="submit">Mint!</Button>
-        <Button onClick={test}>test!</Button>
-
-      </form>
+          <label htmlFor="title">Title:</label>
+          <input id="title" name="title" type="text" required />
+          <label htmlFor="url">URL To Content:</label>
+          <input id="url" name="url" type="text" onChange={e => setUrl(e.target.value)} required />
+          <Button type="submit">Mint!</Button>
+        </form>
       <img src={url}></img>
       </>
       )
